@@ -1,10 +1,11 @@
 import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:we_chat/screens/auth/login_screen.dart';
 import 'package:we_chat/screens/home_screen.dart';
+import 'package:we_chat/widgets/bottomnav.dart';
+import 'package:we_chat/widgets/tabbar.dart';
 import '../main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:we_chat/api/apis.dart';
@@ -32,7 +33,7 @@ class _SplashscreenState extends State<Splashscreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (_) => const HomeScreen(),
+              builder: (_) => const Bottomnav(),
             ));
       } else {
         Navigator.pushReplacement(

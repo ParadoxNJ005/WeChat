@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:we_chat/api/apis.dart';
 import 'package:we_chat/helper/dialogs.dart';
 import 'package:we_chat/screens/home_screen.dart';
+import 'package:we_chat/widgets/bottomnav.dart';
 import '../../main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,11 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if ((await APIs.userExists())) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+              context, MaterialPageRoute(builder: (_) => const Bottomnav()));
         } else {
           APIs.createUser().then((value) => {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()))
+                    MaterialPageRoute(builder: (_) => const Bottomnav()))
               });
         }
       }
