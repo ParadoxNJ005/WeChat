@@ -244,12 +244,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             } else {
                               return ListView.builder(
                                   itemCount: _list.length,
-                                  shrinkWrap:
-                                      true, // Ensure the ListView doesn't try to expand infinitely
+                                  shrinkWrap: true,
                                   itemBuilder: (context, index) {
-                                    return CommunityCard(
-                                      member: _list[index],
-                                    );
+                                    return CommunityCard(member: _list[index]);
                                   });
                             }
                           } else {

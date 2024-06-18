@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/api/apis.dart';
 import 'package:we_chat/main.dart';
 import 'package:we_chat/models/chat_user.dart';
+import 'package:we_chat/models/message.dart';
 import 'package:we_chat/screens/auth/login_screen.dart';
 import 'package:we_chat/screens/profile_screen.dart';
 import 'package:we_chat/widgets/chat_user_card.dart';
@@ -27,6 +29,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+
+    // log("message");
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      log("message");
+      if (APIs.auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          APIs.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          APIs.updateActiveStatus(false);
+        }
+      }
+
+      return Future.value(message);
+    });
   }
 
   @override
@@ -125,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ?.map((e) => ChatUser.fromJson(e.data()))
                               .toList() ??
                           [];
-                      log('Data: ${data}');
+                      // log('Data: ${data}');
                     }
                     if (_list.length == 0) {
                       return Center(

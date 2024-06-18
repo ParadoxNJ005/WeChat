@@ -10,6 +10,7 @@ class ChatUser {
     required this.pushToken,
     required this.email,
     required this.groups,
+    required this.phone,
   });
 
   late String image;
@@ -21,6 +22,7 @@ class ChatUser {
   late String lastActive;
   late String pushToken;
   late String email;
+  late String phone;
   late List<String> groups;
 
   ChatUser.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class ChatUser {
     lastActive = json['last_active'] ?? '';
     pushToken = json['push_token'] ?? '';
     email = json['email'] ?? '';
+    phone = json['phone'] ?? '';
     groups = List<String>.from(json['groups'] ?? []);
   }
 
@@ -48,6 +51,7 @@ class ChatUser {
     data['push_token'] = pushToken;
     data['email'] = email;
     data['groups'] = groups;
+    data['phone'] = phone;
     return data;
   }
 }

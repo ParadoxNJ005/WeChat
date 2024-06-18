@@ -14,7 +14,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final ChatUser user;
+  final ChatUser? user;
 
   const ProfileScreen({super.key, required this.user});
 
@@ -54,12 +54,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: FloatingActionButton.extended(
               backgroundColor: Color.fromARGB(255, 244, 118, 118),
               onPressed: () async {
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                );
+                await APIs.updateActiveStatus(false);
+
+                //sign out from app
+                await APIs.auth.signOut().then((value) async {
+                  await GoogleSignIn().signOut().then((value) {
+                    //for moving to home screen
+                    Navigator.pop(context);
+
+                    APIs.auth = FirebaseAuth.instance;
+
+                    //replacing home screen with login screen
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()));
+                  });
+                });
               },
               icon: const Icon(
                 Icons.logout,
@@ -109,7 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: CachedNetworkImage(
                                     height: mq.height * .25,
                                     width: mq.width * .55,
-                                    imageUrl: widget.user.image,
+                                    imageUrl: widget.user != null
+                                        ? widget.user!.image
+                                        : "",
                                     imageBuilder: (context, imageProvider) =>
                                         ClipOval(
                                       child: Container(
@@ -172,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //add email area------------------------------------------------------------
                     SizedBox(height: mq.height * 0.03),
                     Text(
-                      widget.user.email,
+                      widget.user!.email,
                       style:
                           const TextStyle(color: Colors.black54, fontSize: 20),
                     ),
@@ -180,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //form field area------------------------------------------------------------
                     SizedBox(height: mq.height * 0.05),
                     TextFormField(
-                      initialValue: widget.user.name,
+                      initialValue: widget.user!.name,
                       validator: (value) => value != null && value.isNotEmpty
                           ? null
                           : 'Required Field',
@@ -202,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     SizedBox(height: mq.height * 0.02),
                     TextFormField(
-                      initialValue: widget.user.about,
+                      initialValue: widget.user!.about,
                       validator: (value) => value != null && value.isNotEmpty
                           ? null
                           : 'Required Field',
